@@ -1,0 +1,30 @@
+.body {
+  background-color: #d9ead3;
+}
+.freightWatch {
+  padding: 40px 40px 0px 40px;
+}
+.load {
+  display: flex;
+  border: solid 1px;
+}
+
+.ng-star-inserted {
+  padding: 6px 1rem;
+}
+table {
+  width: 100%;
+}
+
+tr [_ngcontent-ng-c3288653432] {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 14px 0rem 10px;
+  letter-spacing: 0.25px;
+  color: #2c2c2e;
+  vertical-align: top;
+  width: 100%;
+}
+td [_ngcontent-ng-c3288653432] {
+  max-width: 100%;
+}
