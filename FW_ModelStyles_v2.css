@@ -28,3 +28,74 @@ tr [_ngcontent-ng-c3288653432] {
 td [_ngcontent-ng-c3288653432] {
   max-width: 100%;
 }
+.mdc-dialog__container {
+  background-color: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  overflow: auto;
+}
+
+.mat-mdc-dialog-content {
+  height: 600px;
+  width: 800px;
+  background-color: rgb(246, 246, 210);
+  margin: 5% auto;
+  padding: 20px;
+  display: flex;
+}
+.column-item {
+  width: 33%;
+}
+
+.row-item {
+  display: flex;
+  padding: 0 0 0 10px;
+}
+.broker-info-item {
+  padding: 0 20px 0 0;
+}
+
+.pink {
+  background-color: pink;
+}
+.green {
+  background-color: green;
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.cange_modal_background {
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  overflow: auto;
+}
+.change_modal_window {
+  height: 150px;
+  width: 600px;
+  background-color: rgb(255, 255, 255);
+  margin: 15% auto;
+  padding: 20px;
+  /* display: flex; */
+}
+
+/*history */
+
+.change-header {
+  font-size: 10px;
+}
+.change-item {
+  font-size: 10px;
+}
+.row {
+  display: flex;
+}
+.change-audit {
+  display: flex;
+}
