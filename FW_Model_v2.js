@@ -33,13 +33,7 @@ class Load {
     load.classList.add("ng-star-inserted");
     load.classList.add(this.color);
     load.classList.add("load");
-
     load.setAttribute("_ngcontent-ng-c3288653432", "");
-    load.addEventListener("click", function () {
-      let openCard = new LoadCard(this.freightBill, this.billOfLading);
-      openCard.createLoadCard();
-      openCard.createHistory();
-    });
     tbody.append(load);
 
     let emptyBlock = document.createElement("td");
@@ -109,18 +103,32 @@ class Load {
     DELdateBlock.setAttribute("_ngcontent-ng-c3288653432", "");
     DELdateBlock.textContent = this.DELdate;
     load.append(DELdateBlock);
+
+    let historyType = this.historyType;
+
+    load.addEventListener("click", function () {
+      let openCard = new LoadCard(
+        freightBillBlock.textContent,
+        billOfLadingBlock.textContent,
+        historyType
+      );
+      openCard.createLoadCard();
+      openCard.createHistory();
+      console.log(openCard);
+    });
   }
   get Gethistory() {
     return this.historyType;
   }
+  get getFreightBill() {
+    return this.freightBill;
+  }
 }
-class LoadCard extends Load {
-  constructor(freightBill, billOfLading, historyType /*dispNotes*/) {
-    super(freightBill, billOfLading, historyType);
-    // this.freightBill = freightBill;
-    // this.billOfLading = billOfLading;
-    // this.history = history;
-    // this.dispNotes = dispNotes;
+class LoadCard {
+  constructor(freightBill, billOfLading, historyType) {
+    this.freightBill = freightBill;
+    this.billOfLading = billOfLading;
+    this.historyType = historyType;
   }
   createLoadCard() {
     let overlayContainer = document.createElement("div");
@@ -267,73 +275,76 @@ class LoadCard extends Load {
     let chanreRecordContainer = document.createElement("div");
     chanreRecordContainer.classList.add("change-record-container");
     historyContainer.append(chanreRecordContainer);
+    //==========================================================================
+    for (let i = 0; i < this.historyType.updates.length; i += 1) {
+      let changesBody = document.createElement("div");
+      changesBody.classList.add("changes-body");
+      chanreRecordContainer.append(changesBody);
 
-    let changesBody = document.createElement("div");
-    changesBody.classList.add("changes-body");
-    chanreRecordContainer.append(changesBody);
+      //блок з імʼям діспа і датою апдейту
+      let changesHeader = document.createElement("div");
+      changesHeader.classList.add("change-header");
+      changesHeader.classList.add("m-b-2");
+      changesBody.append(changesHeader);
 
-    //блок з імʼям діспа і датою апдейту
-    let changesHeader = document.createElement("div");
-    changesHeader.classList.add("change-header");
-    changesHeader.classList.add("m-b-2");
-    changesBody.append(changesHeader);
+      let dispName = document.createElement("span");
+      dispName.classList.add("changed-by");
+      dispName.textContent = this.historyType.updates[i].dispName;
+      changesHeader.append(dispName);
 
-    let dispName = document.createElement("span");
-    dispName.classList.add("changed-by");
-    dispName.textContent = "George Mamtsev";
-    changesHeader.append(dispName);
+      let updatedWord = document.createElement("span");
+      updatedWord.classList.add("change-type");
+      updatedWord.textContent = " updated";
+      changesHeader.append(updatedWord);
 
-    let updatedWord = document.createElement("span");
-    updatedWord.classList.add("change-type");
-    updatedWord.textContent = " updated";
-    changesHeader.append(updatedWord);
+      let shipmentWord = document.createElement("span");
+      shipmentWord.classList.add("change-entity");
+      shipmentWord.textContent = " shipment";
+      changesHeader.append(shipmentWord);
+      console.log(i);
 
-    let shipmentWord = document.createElement("span");
-    shipmentWord.classList.add("change-entity");
-    shipmentWord.textContent = " shipment";
-    changesHeader.append(shipmentWord);
+      let updateDate = document.createElement("span");
+      updateDate.classList.add("change-date");
+      updateDate.textContent = " 01/02";
+      changesHeader.append(updateDate);
 
-    let updateDate = document.createElement("span");
-    updateDate.classList.add("change-date");
-    updateDate.textContent = " 01/02";
-    changesHeader.append(updateDate);
+      //блок з інформацією апдету
+      let changeList = document.createElement("div");
+      changeList.classList.add("changes-list");
+      changesBody.append(changeList);
 
-    //блок з інформацією апдету
-    let changeList = document.createElement("div");
-    changeList.classList.add("changes-list");
-    changesBody.append(changeList);
+      let changeItem = document.createElement("div");
+      changeItem.classList.add("change-item");
+      changeList.append(changeItem);
 
-    let changeItem = document.createElement("div");
-    changeItem.classList.add("change-item");
-    changeList.append(changeItem);
+      let changeRow = document.createElement("div");
+      changeRow.classList.add("row");
+      changeRow.classList.add("w-100");
+      changeItem.append(changeRow);
 
-    let changeRow = document.createElement("div");
-    changeRow.classList.add("row");
-    changeRow.classList.add("w-100");
-    changeItem.append(changeRow);
+      //cтатус який треба відслідковувати !!!!!!
+      let changeName = document.createElement("div");
+      changeName.classList.add("changed-property-name");
+      changeName.classList.add("col-4");
+      changeName.textContent = this.historyType.updates[i].updType; //(or CheckIn/CheckOut/Eta)
+      changeRow.append(changeName);
 
-    //cтатус який треба відслідковувати !!!!!!
-    let changeName = document.createElement("div");
-    changeName.classList.add("changed-property-name");
-    changeName.classList.add("col-4");
-    changeName.textContent = "DispatchStatus"; //(or CheckIn/CheckOut/Eta)
-    changeRow.append(changeName);
+      let changeAudit = document.createElement("div");
+      changeAudit.classList.add("change-audit");
+      changeAudit.classList.add("col-8");
+      changeRow.append(changeAudit);
 
-    let changeAudit = document.createElement("div");
-    changeAudit.classList.add("change-audit");
-    changeAudit.classList.add("col-8");
-    changeRow.append(changeAudit);
+      let changeOld = document.createElement("div");
+      changeOld.classList.add("change-old");
+      //changeOld.classList.add("ng-star-inserted");
+      changeOld.textContent = this.historyType.updates[i].old; // or At pickup/ At delivery ...
+      changeAudit.append(changeOld);
 
-    let changeOld = document.createElement("div");
-    changeOld.classList.add("change-old");
-    //changeOld.classList.add("ng-star-inserted");
-    changeOld.textContent = "In Transit/Loaded"; // or At pickup/ At delivery ...
-    changeAudit.append(changeOld);
-
-    let changeNew = document.createElement("div");
-    changeNew.classList.add("change-new");
-    changeNew.textContent = "At delivery";
-    changeAudit.append(changeNew);
+      let changeNew = document.createElement("div");
+      changeNew.classList.add("change-new");
+      changeNew.textContent = this.historyType.updates[i].new;
+      changeAudit.append(changeNew);
+    }
   }
 }
 
@@ -345,26 +356,7 @@ function closeChangeModal() {
   let closemodal = document.querySelector(".cange_modal_background");
   closemodal.remove();
 }
-//відкриває модальне вікно зі збереженням інформації
-// function openModalWindow() {
-//   freightWatch.onclick = function (e) {
-//     let loads = e.target.closest(".load");
-//     if (!loads) return;
 
-//     let freightBill = Number(loads.children[1].textContent);
-//     let billOfLading = Number(loads.children[2].textContent);
-//     let openCard = new LoadCard(
-//       freightBill,
-//       billOfLading
-//       // historyType
-//       // dispNotes.textContent
-//     );
-//     openCard.createLoadCard();
-//     openCard.createHistory();
-//     // console.log(openCard);
-//   };
-// }
-// openModalWindow();
 //закриває модальне вікно при натисканні поза його межами
 window.onclick = function (e) {
   let modals = document.querySelector(".mdc-dialog__container");
@@ -377,68 +369,83 @@ let historySrore = [
   {
     id: 0,
     name: "no my update",
-    update1: {
-      dispName: "Ksenia Rizkhova",
-      updType: "DispatchStatus",
-      old: "ETA",
-      new: "At pickup",
-    },
-    update2: {
-      dispName: "Ethan Flover",
-      updType: "DispatchStatus",
-      old: "At pickup",
-      new: "In Transit/Loaded",
-    },
-    update3: {
-      dispName: "Ethan Flover",
-      updType: "DispatchStatus",
-      old: "In Transit/Loaded",
-      new: "ETA",
-    },
+    updates: [
+      {
+        updateNumber: 1,
+        dispName: "Ksenia Rizkhova",
+        updType: "DispatchStatus",
+        old: "ETA",
+        new: "At pickup",
+      },
+      {
+        updateNumber: 2,
+        dispName: "Ethan Flover",
+        updType: "DispatchStatus",
+        old: "At pickup",
+        new: "In Transit/Loaded",
+      },
+      {
+        updateNumber: 3,
+        dispName: "Ethan Flover",
+        updType: "DispatchStatus",
+        old: "In Transit/Loaded",
+        new: "ETA",
+      },
+    ],
   },
   {
     id: 1,
     name: "invalid update",
-    update1: {
-      dispName: "Ksenia Rizkhova",
-      updType: "DispatchStatus",
-      old: "Need to check",
-      new: "ETA",
-    },
-    update2: {
-      dispName: "George Mamtsev",
-      updType: "ETA",
-      old: "12:00",
-      new: "13:00",
-    },
-    update2: {
-      dispName: "Ksenia Rizkhova",
-      updType: "DispatchStatus",
-      old: "ETA",
-      new: "At pickup",
-    },
+    updates: [
+      {
+        updateNumber: 1,
+        dispName: "Ksenia Rizkhova",
+        updType: "DispatchStatus",
+        old: "Need to check",
+        new: "ETA",
+      },
+      {
+        updateNumber: 2,
+        dispName: "George Mamtsev",
+        updType: "ETA",
+        old: "12:00",
+        new: "13:00",
+      },
+      {
+        updateNumber: 3,
+        dispName: "Ksenia Rizkhova",
+        updType: "DispatchStatus",
+        old: "ETA",
+        new: "At pickup",
+      },
+    ],
   },
   {
     id: 2,
     name: "my update",
-    update1: {
-      dispName: "George Mamtsev",
-      updType: "DispatchStatus",
-      old: "Need to check",
-      new: "ETA",
-    },
-    update2: {
-      dispName: "Ksenia Rizkhova",
-      updType: "DispatchStatus",
-      old: "ETA",
-      new: "At pickup",
-    },
-    update3: {
-      dispName: "Ksenia Rizkhova",
-      updType: "DispatchStatus",
-      old: "At pickup",
-      new: "In Transit/Loaded",
-    },
+    updates: [
+      {
+        updateNumber: 1,
+        dispName: "George Mamtsev",
+        updType: "DispatchStatus",
+        old: "Need to check",
+        new: "ETA",
+      },
+      {
+        updateNumber: 2,
+        dispName: "Ksenia Rizkhova",
+        updType: "DispatchStatus",
+        old: "ETA",
+        new: "At pickup",
+      },
+      {
+        updateNumber: 3,
+        dispName: "Ksenia Rizkhova",
+        updType: "DispatchStatus",
+        old: "At pickup",
+        new: "In Transit/Loaded",
+      },
+    ],
   },
 ];
 
@@ -484,11 +491,3 @@ load3 = new Load(
   historySrore[2]
 );
 load3.createLoad();
-
-// console.log(load1.Gethistory);
-// console.log(load2.Gethistory);
-// console.log(load3.Gethistory);
-
-// console.log(load2.historyType);
-// console.log(load3.historyType);
-// console.log(load1.historyType.update1.dispName);
